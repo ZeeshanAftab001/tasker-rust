@@ -1,3 +1,8 @@
+/*
+* tasker - todo app in rust
+* author - ZeeshanAftab001
+*/
+
 use crate::core::{config::Config,database};
 use sqlx::PgPool;
 mod core;
