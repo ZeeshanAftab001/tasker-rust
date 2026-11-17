@@ -4,6 +4,8 @@
 */
 
 use crate::core::{config::Config,database};
+
+
 use sqlx::PgPool;
 mod core;
 mod models;
@@ -22,6 +24,7 @@ struct AppState{
 
 #[tokio::main]
 async fn main(){
+    tracing_subscriber::fmt::init();
     dotenvy::dotenv().ok();
     // get config
     let config=Config::from_env().await.expect("Failed to load config");

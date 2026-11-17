@@ -1,8 +1,8 @@
 pub mod task;
 pub mod user;
-use axum::{Router, middleware::from_fn};
-
-use crate::{AppState, logging};
+use axum::{Router};
+use crate::{AppState};
+use tower_http::trace::TraceLayer;
 
 
 pub async fn get_router() -> Router<AppState> {
@@ -12,5 +12,5 @@ pub async fn get_router() -> Router<AppState> {
     Router::new()
     .nest("/api/v1/users", user_router)
     .nest("/api/v1/tasks", task_router)
-    .layer(from_fn(logging::task::logger))
+    .layer(TraceLayer::new_for_http())
 }
