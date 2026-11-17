@@ -11,6 +11,7 @@ mod handlers;
 mod services;
 mod routers;
 mod logging;
+mod errors;
 
 #[derive(Clone)]
 struct AppState{
@@ -33,13 +34,10 @@ async fn main(){
         pgpool : pool
     };
     // create router
-    let app = routers::task::create_router()
+    let app = routers::get_router()
     .await
-    .expect("Error creating Router")
     .with_state(state);
     
-
-
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }

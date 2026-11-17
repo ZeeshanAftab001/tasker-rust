@@ -1,19 +1,19 @@
 use axum::extract::{Path,Json,State};
 use uuid::Uuid;
 use axum::{http::StatusCode};
-use crate::{AppState, models::task::{CreateTodo, 
+use crate::{AppState, errors::task::TaskError, models::task::{CreateTodo, 
                     Todo, UpdateTodo}, services};
 
-pub async fn get_todo(state: State<AppState>,Path(id): Path<Uuid>) -> Result<Json<Todo>, StatusCode> {
+pub async fn get_todo(state: State<AppState>,Path(id): Path<Uuid>) -> Result<Json<Todo>, TaskError> {
     services::task::get_one(state, id).await
 }
 
-pub async fn add_todo(state : State<AppState>,Json(payload): Json<CreateTodo>){
+pub async fn add_todo(state : State<AppState>,Json(payload): Json<CreateTodo>) -> Json<Todo> {
     let id=Uuid::new_v4();
-    services::task::create(state,id,payload.title, payload.content, payload.status).await;
+    services::task::create(state,id,payload.title, payload.content, payload.status).await
 }
 
-pub async fn get_all_todo(state: State<AppState>) -> Json<Vec<Todo>> {
+pub async fn get_all_todo(state: State<AppState>) -> Result<Json<Vec<Todo>>,TaskError> {
     services::task::get_all(state).await
 }
 
